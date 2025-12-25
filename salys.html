@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OBRIXION — Стиль будущего</title>
+    <style>
+        /* ===== ATMOSPHERE ===== */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(139, 92, 246, .12), transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, .08), transparent 45%),
+                linear-gradient(180deg, #020204, #050510);
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='white' opacity='0.06'/%3E%3C/svg%3E");
+            opacity: .15;
+            z-index: -1;
+        }
+
+        :root {
+            --main: #8B5CF6;
+            --bg: #050508;
+            --glass: rgba(139, 92, 246, 0.12);
+            --glow: 0 0 40px rgba(139, 92, 246, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #0c0c18, #020204);
+            color: #e5e5f0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 2, 6, 0.85);
+            backdrop-filter: blur(30px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 420px;
+            padding: 40px;
+            border-radius: 26px;
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.18), rgba(0, 0, 0, 0.6));
+            box-shadow: 0 0 80px rgba(139, 92, 246, 0.25);
+            text-align: center;
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-content h3 {
+            color: var(--main);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .modal-content p {
+            margin-bottom: 20px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .modal-features {
+            text-align: left;
+            margin: 25px 0;
+            padding: 0 20px;
+        }
+
+        .modal-features li {
+            margin-bottom: 10px;
+            padding-left: 5px;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .modal-features li:before {
+            content: "•";
+            color: var(--main);
+            margin-right: 10px;
+        }
+
+        .modal-price {
+            font-size: 1.8rem;
+            color: #fff;
+            margin: 25px 0;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .modal-buttons button {
+            padding: 14px 28px;
+            border-radius: 14px;
+            border: 1px solid var(--main);
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 160px;
+        }
+
+        .modal-buttons button:hover {
+            background: var(--main);
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        /* ===== CART ===== */
+        .cart {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            background: rgba(139, 92, 246, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 18px 22px;
+            box-shadow: var(--glow);
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .cart:hover {
+            background: rgba(139, 92, 246, 0.25);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
+        }
+
+        .cart span {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .cart-badge {
+            background: var(--main);
+            color: #000;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* ===== CHECKOUT ===== */
+        .checkout {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 5, 10, 0.92);
+            backdrop-filter: blur(30px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .checkout.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .checkout-box {
+            width: 90%;
+            max-width: 400px;
+            padding: 40px;
+            border-radius: 26px;
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.18), rgba(0, 0, 0, 0.7));
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+            box-shadow: 0 0 60px rgba(139, 92, 246, 0.3);
+        }
+
+        .checkout.active .checkout-box {
+            transform: translateY(0);
+        }
+
+        .checkout-box h3 {
+            margin-bottom: 25px;
+            color: var(--main);
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .checkout-items {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+        }
+
+        .checkout-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .checkout-item:last-child {
+            border-bottom: none;
+        }
+
+        .checkout-box input {
+            width: 100%;
+            margin-bottom: 14px;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .checkout-box input:focus {
+            outline: none;
+            border-color: var(--main);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .checkout-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .checkout-box button {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            background: var(--main);
+            border: none;
+            color: #000;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkout-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .checkout-box button.secondary {
+            background: transparent;
+            border: 1px solid var(--main);
+            color: var(--main);
+        }
+
+        .checkout-box button.secondary:hover {
+            background: var(--main);
+            color: #000;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            perspective: 1200px;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(139, 92, 246, .25), transparent 60%);
+            filter: blur(120px);
+            animation: floatGlow 12s ease-in-out infinite;
+        }
+
+        @keyframes floatGlow {
+
+            0%,
+            100% {
+                transform: translate(-50px, -30px);
+            }
+
+            50% {
+                transform: translate(50px, 30px);
+            }
+        }
+
+        /* ===== LOGO ===== */
+        .logo-container {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: clamp(4rem, 10vw, 9rem);
+            font-weight: 800;
+            letter-spacing: 0.3em;
+            color: transparent;
+            -webkit-text-stroke: 2px var(--main);
+            text-shadow: var(--glow);
+            display: flex;
+            will-change: transform;
+        }
+
+        .logo span {
+            opacity: 0;
+            transform: translate3d(calc(-200px + 400px * var(--randx)),
+                    calc(-200px + 400px * var(--randy)),
+                    calc(-400px + 800px * var(--randz))) rotate(40deg);
+            animation: assemble 2.5s ease forwards;
+        }
+
+        @keyframes assemble {
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0) rotate(0deg);
+            }
+        }
+
+        .logo.floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-18px);
+            }
+        }
+
+        /* ===== ABSTRACT OBJECTS ===== */
+        .scene {
+            position: absolute;
+            inset: 0;
+            transform-style: preserve-3d;
+        }
+
+        .shape {
+            position: absolute;
+            width: 220px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(12px);
+            border-radius: 14px;
+            box-shadow: 0 0 50px rgba(139, 92, 246, 0.25);
+            transform-style: preserve-3d;
+            transition: transform 0.2s ease-out;
+            will-change: transform;
+        }
+
+        /* ===== SECTIONS ===== */
+        section {
+            padding: 140px 10%;
+            position: relative;
+        }
+
+        .glass {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(18px);
+            border-radius: 22px;
+            padding: 60px;
+            box-shadow: var(--glow);
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            margin-bottom: 20px;
+            color: var(--main);
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        /* ===== SECTION TRANSITIONS ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px) scale(0.96);
+            transition: all 1.2s cubic-bezier(.2, .8, .2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* ===== CATALOG ===== */
+        .catalog {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 40px;
+            perspective: 1200px;
+            margin-top: 40px;
+        }
+
+        .card {
+            position: relative;
+            height: 380px;
+            border-radius: 22px;
+            background: linear-gradient(135deg,
+                    rgba(139, 92, 246, 0.25),
+                    rgba(255, 255, 255, 0.03));
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 60px rgba(139, 92, 246, 0.25);
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            will-change: transform;
+            cursor: pointer;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top,
+                    rgba(139, 92, 246, 0.35),
+                    transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.35);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-content {
+            position: absolute;
+            inset: 0;
+            padding: 30px;
+            transform-style: preserve-3d;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card h3 {
+            color: var(--main);
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            transform: translateZ(40px);
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            transform: translateZ(30px);
+        }
+
+        .price {
+            font-size: 1.3rem;
+            color: #fff;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+
+        /* ===== ARTICLES ===== */
+        .articles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .article {
+            padding: 30px;
+            border-radius: 18px;
+            background: rgba(139, 92, 246, 0.08);
+            backdrop-filter: blur(12px);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .article:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: var(--glow);
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            opacity: 0.6;
+        }
+
+        /* ===== UTILITIES ===== */
+        .empty-cart {
+            text-align: center;
+            padding: 30px;
+            opacity: 0.7;
+        }
+
+        .close-checkout {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--main);
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .close-checkout:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 80px 5%;
+            }
+
+            .glass {
+                padding: 30px;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .modal-buttons button {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .cart {
+                bottom: 20px;
+                right: 20px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="hero">
+        <div class="hero-glow"></div>
+        <div class="scene" id="scene"></div>
+
+        <div class="logo-container">
+            <div class="logo" id="logo"></div>
+        </div>
+    </div>
+
+    <section>
+        <div class="glass">
+            <h2>О магазине одежды OBRIXION</h2>
+            <p>
+                OBRIXION — это не просто одежда. Это система сигналов, эмоций и внутреннего состояния.
+                Мы создаём стиль как форму диалога между человеком и пространством будущего.
+                Каждая линия, текстура и форма — отражение психологии, уверенности и глубины личности.
+            </p>
+        </div>
+    </section>
+
+    <section>
+        <div class="glass">
+            <h2>Психология стиля</h2>
+            <p>
+                Одежда влияет на восприятие сильнее слов. Цвет активирует эмоции,
+                форма задаёт ритм, а фактура формирует ощущение контроля.
+                Стиль OBRIXION построен на осознанности, минимализме и энергетике будущего.
+            </p>
+
+            <div class="reveal" style="margin-top: 60px;">
+                <h2>Каталог OBRIXION</h2>
+                <div class="catalog">
+                    <div class="card"
+                        data-features="Материал: Премиум хлопок|Посадка: Oversize|Цвет: Graphite Black|Производство: Limited Edition">
+                        <div class="card-content">
+                            <div>
+                                <h3>OBRIXION CORE</h3>
+                                <p>Минималистичный силуэт. Контроль. Влияние.</p>
+                            </div>
+                            <div class="price">₽ 12 900</div>
+                        </div>
+                    </div>
+
+                    <div class="card"
+                        data-features="Материал: Tech fabric|Эффект: Нейро-линии|Форма: Slim fit|Коллекция: Neuro Series">
+                        <div class="card-content">
+                            <div>
+                                <h3>NEURO LINE</h3>
+                                <p>Одежда как продолжение психологии.</p>
+                            </div>
+                            <div class="price">₽ 14 500</div>
+                        </div>
+                    </div>
+
+                    <div class="card"
+                        data-features="Материал: Soft shell|Стиль: Minimal void|Посадка: Relaxed|Ограниченный тираж: 100 шт">
+                        <div class="card-content">
+                            <div>
+                                <h3>VOID FORM</h3>
+                                <p>Чистая форма. Эмоциональный вакуум.</p>
+                            </div>
+                            <div class="price">₽ 11 800</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-top:40px;">
+                Ты не следуешь моде — ты формируешь состояние.
+                Запусти свой путь к пониманию себя.
+            </p>
+        </div>
+    </section>
+
+    <section>
+        <h2>Последние статьи</h2>
+        <div class="articles">
+            <div class="article">
+                <h3>Эмоциональное влияние одежды</h3>
+                <p>Как геометрия и цвет влияют на восприятие человека в обществе.</p>
+            </div>
+            <div class="article">
+                <h3>Будущее моды</h3>
+                <p>Почему стиль становится инструментом психологии и самоконтроля.</p>
+            </div>
+            <div class="article">
+                <h3>Глубина минимализма</h3>
+                <p>Меньше деталей — больше смысла и силы.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        © OBRIXION — Стиль будущего
+    </footer>
+
+    <!-- MODAL -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle"></h3>
+            <p id="modalDesc"></p>
+            <ul class="modal-features" id="modalFeatures"></ul>
+            <div class="modal-price" id="modalPrice"></div>
+            <div class="modal-buttons">
+                <button id="addToCart">Добавить в корзину</button>
+                <button id="closeModal">Назад</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CART -->
+    <div class="cart" id="cart">
+        <div class="cart-badge" id="cartCount">0</div>
+        <span>Корзина</span>
+    </div>
+
+    <!-- CHECKOUT -->
+    <div class="checkout" id="checkout">
+        <button class="close-checkout" id="closeCheckout">×</button>
+        <div class="checkout-box">
+            <h3>Оформление заказа</h3>
+            <div class="checkout-items" id="checkoutItems">
+                <div class="empty-cart">Корзина пуста</div>
+            </div>
+            <input type="text" placeholder="Ваше имя" id="checkoutName">
+            <input type="email" placeholder="Email" id="checkoutEmail">
+            <input type="text" placeholder="Адрес доставки" id="checkoutAddress">
+            <div class="checkout-buttons">
+                <button id="confirmOrder">Подтвердить заказ</button>
+                <button class="secondary" id="clearCart">Очистить корзину</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ===== LOGO ASSEMBLY ===== */
+        const text = "OBRIXION";
+        const logo = document.getElementById("logo");
+
+        [...text].forEach(letter => {
+            const span = document.createElement("span");
+            span.textContent = letter;
+            span.style.setProperty("--randx", Math.random());
+            span.style.setProperty("--randy", Math.random());
+            span.style.setProperty("--randz", Math.random());
+            logo.appendChild(span);
+        });
+
+        setTimeout(() => {
+            logo.classList.add("floating");
+        }, 2600);
+
+        /* ===== ABSTRACT SHAPES ===== */
+        const sceneElement = document.getElementById("scene");
+        const shapes = [];
+
+        for (let i = 0; i < 14; i++) {
+            const s = document.createElement("div");
+            s.className = "shape";
+            s.style.top = Math.random() * 100 + "%";
+            s.style.left = Math.random() * 100 + "%";
+            s.dataset.depth = Math.random() * 800;
+            sceneElement.appendChild(s);
+            shapes.push(s);
+        }
+
+        /* ===== MOUSE MOVE ===== */
+        document.addEventListener("mousemove", e => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 40;
+            const y = (e.clientY / window.innerHeight - 0.5) * 40;
+
+            shapes.forEach(s => {
+                s.style.transform =
+                    `translateZ(${s.dataset.depth}px)
+   rotateX(${y}deg)
+   rotateY(${x}deg)`;
+            });
+        }, { passive: true });
+
+        /* ===== SMOOTH SCROLL EFFECT ===== */
+        let currentScroll = 0;
+        let targetScroll = 0;
+
+        window.addEventListener("scroll", () => {
+            targetScroll = window.scrollY;
+        }, { passive: true });
+
+        function smoothScrollAnimation() {
+            const diff = targetScroll - currentScroll;
+            if (Math.abs(diff) > 0.5) {
+                currentScroll += diff * 0.1;
+
+                shapes.forEach(s => {
+                    const depth = s.dataset.depth;
+                    const slowRotate = currentScroll * 0.05;
+                    s.style.transform =
+                        `translateZ(${depth}px)
+       rotateZ(${slowRotate}deg)`;
+                });
+            }
+
+            requestAnimationFrame(smoothScrollAnimation);
+        }
+
+        smoothScrollAnimation();
+
+        /* ===== SECTION REVEAL ===== */
+        const reveals = document.querySelectorAll(".reveal");
+
+        const observer = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("active");
+                    }
+                });
+            },
+            { threshold: 0.2 }
+        );
+
+        reveals.forEach(r => observer.observe(r));
+
+        /* ===== SHOPPING CART LOGIC ===== */
+        let cart = [];
+        let cartCount = 0;
+
+        const modalEl = document.getElementById("modal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalDesc = document.getElementById("modalDesc");
+        const modalPrice = document.getElementById("modalPrice");
+        const modalFeatures = document.getElementById("modalFeatures");
+        const addToCartBtn = document.getElementById("addToCart");
+        const closeModalBtn = document.getElementById("closeModal");
+        const cartEl = document.getElementById("cart");
+        const cartCountEl = document.getElementById("cartCount");
+        const checkoutEl = document.getElementById("checkout");
+        const checkoutItems = document.getElementById("checkoutItems");
+        const confirmOrderBtn = document.getElementById("confirmOrder");
+        const closeCheckoutBtn = document.getElementById("closeCheckout");
+        const clearCartBtn = document.getElementById("clearCart");
+        const checkoutName = document.getElementById("checkoutName");
+        const checkoutEmail = document.getElementById("checkoutEmail");
+        const checkoutAddress = document.getElementById("checkoutAddress");
+
+        let currentProduct = null;
+
+        /* ===== CARD CLICK HANDLER ===== */
+        document.querySelectorAll(".card").forEach(card => {
+            card.addEventListener("click", () => {
+                const title = card.querySelector("h3").textContent;
+                const desc = card.querySelector("p").textContent;
+                const price = card.querySelector(".price").textContent;
+                const features = card.dataset.features;
+
+                currentProduct = {
+                    title,
+                    desc,
+                    price,
+                    features
+                };
+
+                modalTitle.textContent = title;
+                modalDesc.textContent = desc;
+                modalPrice.textContent = price;
+
+                modalFeatures.innerHTML = "";
+                features.split("|").forEach(feature => {
+                    const li = document.createElement("li");
+                    li.textContent = feature;
+                    modalFeatures.appendChild(li);
+                });
+
+                modalEl.classList.add("active");
+                document.body.style.overflow = "hidden";
+            });
+        });
+
+        /* ===== ADD TO CART ===== */
+        addToCartBtn.addEventListener("click", () => {
+            if (currentProduct) {
+                cart.push(currentProduct);
+                cartCount++;
+                cartCountEl.textContent = cartCount;
+
+                // Показать уведомление
+                showNotification(`${currentProduct.title} добавлен в корзину!`);
+
+                closeModal();
+            }
+        });
+
+        /* ===== CLOSE MODAL ===== */
+        closeModalBtn.addEventListener("click", closeModal);
+
+        modalEl.addEventListener("click", (e) => {
+            if (e.target === modalEl) {
+                closeModal();
+            }
+        });
+
+        function closeModal() {
+            modalEl.classList.remove("active");
+            document.body.style.overflow = "auto";
+            currentProduct = null;
+        }
+
+        /* ===== CART CLICK ===== */
+        cartEl.addEventListener("click", () => {
+            updateCheckoutItems();
+            checkoutEl.classList.add("active");
+            document.body.style.overflow = "hidden";
+        });
+
+        /* ===== CLOSE CHECKOUT ===== */
+        closeCheckoutBtn.addEventListener("click", () => {
+            checkoutEl.classList.remove("active");
+            document.body.style.overflow = "auto";
+        });
+
+        checkoutEl.addEventListener("click", (e) => {
+            if (e.target === checkoutEl) {
+                checkoutEl.classList.remove("active");
+                document.body.style.overflow = "auto";
+            }
+        });
+
+        /* ===== UPDATE CHECKOUT ITEMS ===== */
+        function updateCheckoutItems() {
+            checkoutItems.innerHTML = "";
+
+            if (cart.length === 0) {
+                checkoutItems.innerHTML = '<div class="empty-cart">Корзина пуста</div>';
+                return;
+            }
+
+            cart.forEach((item, index) => {
+                const itemEl = document.createElement("div");
+                itemEl.className = "checkout-item";
+                itemEl.innerHTML = `
+                    <div>
+                        <strong>${item.title}</strong>
+                        <div style="font-size: 0.9rem; opacity: 0.7;">${item.price}</div>
+                    </div>
+                    <button class="remove-item" data-index="${index}" style="
+                        background: transparent;
+                        border: 1px solid var(--main);
+                        color: var(--main);
+                        border-radius: 6px;
+                        padding: 4px 10px;
+                        cursor: pointer;
+                        font-size: 0.9rem;
+                    ">✕</button>
+                `;
+                checkoutItems.appendChild(itemEl);
+            });
+
+            // Добавляем обработчики для кнопок удаления
+            document.querySelectorAll(".remove-item").forEach(btn => {
+                btn.addEventListener("click", (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    cart.splice(index, 1);
+                    cartCount--;
+                    cartCountEl.textContent = cartCount;
+                    updateCheckoutItems();
+                });
+            });
+        }
+
+        /* ===== CLEAR CART ===== */
+        clearCartBtn.addEventListener("click", () => {
+            if (cart.length > 0) {
+                if (confirm("Очистить корзину?")) {
+                    cart = [];
+                    cartCount = 0;
+                    cartCountEl.textContent = 0;
+                    updateCheckoutItems();
+                    showNotification("Корзина очищена");
+                }
+            }
+        });
+
+        /* ===== CONFIRM ORDER ===== */
+        confirmOrderBtn.addEventListener("click", () => {
+            if (cart.length === 0) {
+                showNotification("Корзина пуста", true);
+                return;
+            }
+
+            if (!checkoutName.value || !checkoutEmail.value || !checkoutAddress.value) {
+                showNotification("Заполните все поля", true);
+                return;
+            }
+
+            // Имитация успешного заказа
+            const total = cart.reduce((sum, item) => {
+                const price = parseInt(item.price.replace(/[^\d]/g, ''));
+                return sum + price;
+            }, 0);
+
+            showNotification(`Заказ оформлен! Сумма: ${total}₽. Мы свяжемся с вами в ближайшее время.`);
+
+            // Очищаем форму
+            cart = [];
+            cartCount = 0;
+            cartCountEl.textContent = 0;
+            checkoutName.value = "";
+            checkoutEmail.value = "";
+            checkoutAddress.value = "";
+            updateCheckoutItems();
+
+            setTimeout(() => {
+                checkoutEl.classList.remove("active");
+                document.body.style.overflow = "auto";
+            }, 2000);
+        });
+
+        /* ===== NOTIFICATION FUNCTION ===== */
+        function showNotification(message, isError = false) {
+            // Удаляем старые уведомления
+            const oldNotifications = document.querySelectorAll('.notification');
+            oldNotifications.forEach(n => n.remove());
+
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${isError ? 'rgba(255, 50, 50, 0.9)' : 'rgba(139, 92, 246, 0.9)'};
+                color: white;
+                padding: 15px 30px;
+                border-radius: 12px;
+                backdrop-filter: blur(10px);
+                z-index: 9999;
+                animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                font-weight: 500;
+            `;
+
+            document.body.appendChild(notification);
+
+            // Удаляем через 3 секунды
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+
+        // Добавляем стили для анимации уведомлений
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(-50%) translateY(-20px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes fadeOut {
+                from {
+                    opacity: 1;
+                }
+                to {
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        /* ===== ENTER KEY FOR MODAL ===== */
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (modalEl.classList.contains('active')) {
+                    closeModal();
+                }
+                if (checkoutEl.classList.contains('active')) {
+                    checkoutEl.classList.remove('active');
+                    document.body.style.overflow = "auto";
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
